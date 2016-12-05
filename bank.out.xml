@@ -1,12 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <Bank>
 	<Account type="saving">
 		<Id>1001</Id>
-		<Name>Jack Robinson</Name>
+		<Name>*Jack Robi*nson</Name>
 		<Amt>10000</Amt>
 	</Account>
 	<Account type="current">
-		<Id>1002</Id>
-		<Name>Sony Corporation</Name>
+		<Id>*1002</Id>
+		<Name>Sony Corpor*ation</Name>
 		<Amt>1000000</Amt>
 	</Account>
 </Bank>
