@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><tns:JobCancelReplyMessage xmlns:tns="http://www.emeter.com/energyip/amiinterface" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.emeter.com/energyip/amiinterface provisionamento-r-UniversalAMIInterface2.xsd ">
+  <tns:header>
+    <tns:verb>update_delete</tns:verb>
+	<assignment ident1="Template_CD323" ident2="" ident3="" ident4="" ident5="" search="all"/>
+    <tns:noun>tns:noun</tns:noun>
+    <tns:revision>1</tns:revision>
+    <tns:dateTime>2001-12-31T12:00:00</tns:dateTime>
+    <tns:source>tns:source</tns:source>
+    <tns:messageID>tns:messageID</tns:messageID>
+    <tns:asyncReplyTo>tns:asyncReplyTo</tns:asyncReplyTo>
+  <datachannel-list>
+	  <datachannel ident1="d12" obis-id-code="cod123"/>
+	  <datachannel ident1="d22" obis-id-code="cod223"/>
+  </datachannel-list></tns:header>
+  <tns:reply>
+    <tns:replyCode>tns:replyCode</tns:replyCode>
+    <tns:replyText>tns:replyText</tns:replyText>
+    <tns:correlationId>tns:correlationId</tns:correlationId>
+  </tns:reply>
+</tns:JobCancelReplyMessage>

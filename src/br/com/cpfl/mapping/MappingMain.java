@@ -75,26 +75,46 @@ public class MappingMain {
 //		System.out.println("Tempo gasto = " + (Double.valueOf(timeInMillis2 - timeInMillis) / 1000) + " segundo(s)");
 //
 //	}
-	
-	
+
+//	public static void main(String[] args) throws Exception {
+//
+//		System.out.println("Inicio: " + new SimpleDateFormat("HH:mm:ss.SSS").format(new Date()));
+//		long timeInMillis = Calendar.getInstance().getTimeInMillis();
+//
+//		ZTrataFalhaRegistradorFaturadoO ztf = new ZTrataFalhaRegistradorFaturadoO();
+//
+//		InputStream inputStream = new FileInputStream(
+//				new File("D:\\desenv\\CPFL\\Workspace\\trata-falha\\tf-registrador-o.xml"));
+//		OutputStream outputStream = new FileOutputStream(
+//				new File("D:\\desenv\\CPFL\\Workspace\\trata-falha\\tf-registrador-o-OUT.xml"));
+//
+//		ztf.execute(inputStream, outputStream);
+//
+//		System.out.println("Fim: " + new SimpleDateFormat("HH:mm:ss.SSS").format(new Date()));
+//		long timeInMillis2 = Calendar.getInstance().getTimeInMillis();
+//		System.out.println("Tempo gasto = " + (Double.valueOf(timeInMillis2 - timeInMillis) / 1000) + " segundo(s)");
+//
+//	}
+
 	public static void main(String[] args) throws Exception {
 
 		System.out.println("Inicio: " + new SimpleDateFormat("HH:mm:ss.SSS").format(new Date()));
 		long timeInMillis = Calendar.getInstance().getTimeInMillis();
 
-		ZTrataFalhaRegistradorFaturadoO ztf = new ZTrataFalhaRegistradorFaturadoO();
-
+		//ProvisionamentoRTeste zProv = new ProvisionamentoRTeste();
+		ZZfaXiMdmProvisionamentoR zProv = new ZZfaXiMdmProvisionamentoR();
+		
 		InputStream inputStream = new FileInputStream(
-				new File("D:\\desenv\\CPFL\\Workspace\\trata-falha\\tf-registrador-o.xml"));
+				new File("D:\\desenv\\CPFL\\Workspace\\trata-falha\\dados\\provisionamento-r-UniversalAMIInterface2.xml"));
 		OutputStream outputStream = new FileOutputStream(
-				new File("D:\\desenv\\CPFL\\Workspace\\trata-falha\\tf-registrador-o-OUT.xml"));
+				new File("D:\\desenv\\CPFL\\Workspace\\trata-falha\\dados\\provisionamento-r-UniversalAMIInterface2-OUT.xml"));
 
-		ztf.execute(inputStream, outputStream);
+		zProv.execute(inputStream, outputStream);
 
 		System.out.println("Fim: " + new SimpleDateFormat("HH:mm:ss.SSS").format(new Date()));
 		long timeInMillis2 = Calendar.getInstance().getTimeInMillis();
 		System.out.println("Tempo gasto = " + (Double.valueOf(timeInMillis2 - timeInMillis) / 1000) + " segundo(s)");
 
 	}
-	
+
 }

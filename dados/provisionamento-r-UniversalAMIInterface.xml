@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:MeterAssetUpdateReplyMessage xmlns:tns="http://www.emeter.com/energyip/amiinterface" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.emeter.com/energyip/amiinterface provisionamento-r-UniversalAMIInterface.xsd ">
+  <tns:header>
+    <tns:verb>cancel</tns:verb>
+    <tns:noun>tns:noun</tns:noun>
+    <tns:revision>1</tns:revision>
+    <tns:dateTime>2001-12-31T12:00:00</tns:dateTime>
+    <tns:source>tns:source</tns:source>
+    <tns:messageID>tns:messageID</tns:messageID>
+    <tns:asyncReplyTo>tns:asyncReplyTo</tns:asyncReplyTo>
+  </tns:header>
+  <tns:reply>
+    <tns:replyCode>tns:replyCode</tns:replyCode>
+    <tns:replyText>tns:replyText</tns:replyText>
+    <tns:correlationId>tns:correlationId</tns:correlationId>
+  </tns:reply>
+  <tns:meterReads>tns:meterReads</tns:meterReads>
+</tns:MeterAssetUpdateReplyMessage>

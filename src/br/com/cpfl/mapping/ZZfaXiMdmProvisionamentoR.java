@@ -1,16 +1,21 @@
 package br.com.cpfl.mapping;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -25,6 +30,9 @@ import org.w3c.dom.NodeList;
 
 import com.sap.aii.mapping.api.StreamTransformation;
 import com.sap.aii.mapping.api.StreamTransformationException;
+
+import br.com.cpfl.daoejb4.MappingDataAccessRemote;
+import br.com.cpfl.daoejb4.entidades.TmpZmodelObisc;
 
 public class ZZfaXiMdmProvisionamentoR implements StreamTransformation {
 	private Map map;
@@ -48,8 +56,8 @@ public class ZZfaXiMdmProvisionamentoR implements StreamTransformation {
 			document = documentBuilder.parse(inputStream);
 
 			NodeList verbList = document.getElementsByTagName("tns:verb");
-			Element nodeVerb = (Element) verbList.item(0);
-			String valorVerb = nodeVerb.getNodeValue();
+			Node nodeVerb = (Element) verbList.item(0);
+			String valorVerb = nodeVerb.getTextContent();
 
 			if (valorVerb != null && !"".equals(valorVerb) && "update_delete".equalsIgnoreCase(valorVerb)) {
 
@@ -60,7 +68,7 @@ public class ZZfaXiMdmProvisionamentoR implements StreamTransformation {
 //					nodeList = document.getElementsByTagName("metering-point");
 					if (element.getNodeName().equals("metering-point")) {
 						w_match_result = element.getAttribute("nr");// TODO: ver
-																	// se
+																	// se vai
 																	// precisar
 																	// ou
 																	// DELETAR
@@ -95,42 +103,54 @@ public class ZZfaXiMdmProvisionamentoR implements StreamTransformation {
 
 				} // END LOOP FOR
 
-				// <assignment ident1="Template_" ident2="" ident3="" ident4=""
-				// ident5=""/>
+				// <assignment ident1="Template_" ident2="" ident3="" ident4="" ident5=""/>
 				Element assignmentNode = (Element) document.getElementsByTagName("assignment").item(0);
-				String[] split = assignmentNode.getAttribute("ident1").split("_");
-				if (split.length > 0 && "Template".equals(split[0])) {
-					String wModel = split[1];
+
+				String[] split = null;
+				if (assignmentNode != null && assignmentNode.getAttribute("ident1") != null) {
+					split = assignmentNode.getAttribute("ident1").split("_");
+					if (split != null && split.length > 0 && "Template".equals(split[0])) {
+						String wModel = split[1];
 //					select * from Zmodel_OBISC into table t_zmodel_OBISC where model eq w_model.
-					List<String> dadosDaQuery = new ArrayList<String>();
-					Element channelListNode = document.createElement("datachannel-list");
-					for (int i = 0; i < dadosDaQuery.size(); i++) {
-						String wIdent1 = null;
-						String wCanal = dadosDaQuery.get(i) + "getObisCode()";
-						if (dadosDaQuery.get(i) + "OBISC.getFlagRegister()" == null
-								|| "".equals(dadosDaQuery.get(i) + "OBISC.getFlagRegister()")) {
-							wIdent1 = w_serialNumber;
-						} else {
-							wIdent1 = wCanal.substring(2, 5);
+						MappingDataAccessRemote mappingService = getMappingService();
+						List dadosDaQuery = mappingService.consultarModelo(wModel);
+
+//					List<String> dadosDaQuery = new ArrayList<String>();
+						Element channelListNode = document.createElement("datachannel-list");
+						document.getElementsByTagName("tns:header").item(0).appendChild(channelListNode);
+
+						for (int i = 0; i < dadosDaQuery.size(); i++) {
+							TmpZmodelObisc zmodel = (TmpZmodelObisc) dadosDaQuery.get(i);
+							String wIdent1 = null;
+							String wCanal = zmodel.getId().getObiscode();
+							if (zmodel.get_flagRegister_() == null || "".equals(zmodel.get_flagRegister_())) {
+								wIdent1 = w_serialNumber;
+							} else {
+								wIdent1 = wCanal.substring(2, 5);
+							}
+
+							criarNo("datachannel", "",
+									(Element) document.getElementsByTagName("datachannel-list").item(0),
+									new String[] { "obis-id-code", "ident1" }, new String[] { wCanal, wIdent1 });
 						}
-						// String[] new String[]{""};
-//						String[] attValues;
-						criarNo("datachannel", "", channelListNode, new String[] { "obis-id-code", "ident1" },
-								new String[] { wCanal, wIdent1 });
 					}
 				}
+
 				/////////////////////////////////
 
 				nodeVerb.setNodeValue("update_add");
 
-				String local = "/interf/gle/prov_ret/out/PROV_RET_" + w_serialNumber + "_"
-						+ new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(new Date()) + ".xml";
-				OutputStream xmlOut = new FileOutputStream(new File(local));
+//				String local = "/interf/gle/prov_ret/out/PROV_RET_" + w_serialNumber + "_"
+//						+ new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(new Date()) + ".xml";
+//				OutputStream xmlOut = new FileOutputStream(new File(local));
 
 				TransformerFactory transformerFactory = TransformerFactory.newInstance();
 				Transformer transformer = transformerFactory.newTransformer();
+//				transformer.setOutputProperty(OutputKeys.METHOD, "html");
 				DOMSource source = new DOMSource(document);
-				StreamResult result = new StreamResult(xmlOut);
+//				StreamResult result = new StreamResult(xmlOut);
+
+				StreamResult result = new StreamResult(outputStream);
 				transformer.transform(source, result);
 
 			} else {
@@ -197,4 +217,65 @@ public class ZZfaXiMdmProvisionamentoR implements StreamTransformation {
 
 		return node;
 	}
+
+	public static void main(String[] args) throws Exception {
+
+		System.out.println("Inicio: " + new SimpleDateFormat("HH:mm:ss.SSS").format(new Date()));
+		long timeInMillis = Calendar.getInstance().getTimeInMillis();
+
+		ProvisionamentoRTeste zProv = new ProvisionamentoRTeste();
+
+		InputStream inputStream = new FileInputStream(new File(
+				"D:\\desenv\\CPFL\\Workspace\\trata-falha\\dados\\provisionamento-r-UniversalAMIInterface2.xml"));
+		OutputStream outputStream = new FileOutputStream(new File(
+				"D:\\desenv\\CPFL\\Workspace\\trata-falha\\dados\\provisionamento-r-UniversalAMIInterface2-OUT.xml"));
+
+		zProv.execute(inputStream, outputStream);
+
+		System.out.println("Fim: " + new SimpleDateFormat("HH:mm:ss.SSS").format(new Date()));
+		long timeInMillis2 = Calendar.getInstance().getTimeInMillis();
+		System.out.println("Tempo gasto = " + (Double.valueOf(timeInMillis2 - timeInMillis) / 1000) + " segundo(s)");
+
+	}
+
+	/*
+	 * location of JBoss JNDI Service provider the client will use. It should be
+	 * URL string.
+	 */
+	private static final String PROVIDER_URL = "jnp://localhost:1099";
+
+	/*
+	 * specifying the list of package prefixes to use when loading in URL
+	 * context factories. colon separated
+	 */
+	private static final String JNP_INTERFACES = "org.jboss.naming:org.jnp.interfaces";
+
+	/*
+	 * Factory that creates initial context objects. fully qualified class name.
+	 */
+	private static final String INITIAL_CONTEXT_FACTORY = "org.jnp.interfaces.NamingContextFactory";
+
+	private static Context context;
+
+	public MappingDataAccessRemote getMappingService() {
+
+		MappingDataAccessRemote bean = null;
+		// Properties extends HashTable
+		Properties prop = new Properties();
+		prop.put(Context.INITIAL_CONTEXT_FACTORY, INITIAL_CONTEXT_FACTORY);
+		prop.put(Context.URL_PKG_PREFIXES, JNP_INTERFACES);
+		prop.put(Context.PROVIDER_URL, PROVIDER_URL);
+		try {
+			context = new InitialContext(prop);
+			bean = (MappingDataAccessRemote) context.lookup("MappingDataAccessImpl/remote");
+
+			TmpZmodelObisc model = (TmpZmodelObisc) bean.consultarModelo("123").get(0);
+			System.out.println("Modelo recuperado de ejb remoto : " + model.getId().getModel());
+
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+		return bean;
+	}
+
 }

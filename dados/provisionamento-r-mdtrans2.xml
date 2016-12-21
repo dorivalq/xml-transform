@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<import name="master-data-transfer" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="provisionamento-r-mdtrans2.xsd">
+  <version date="2001-01-01">0.0</version>
+  <status type="ok"/>
+  <group-list>
+    <group name="" type="customer">
+      <assignment ident1="" ident2="" ident3="" ident4="" ident5=""/>
+      <identification description="" ident1="" ident2="" ident3="" ident4="" uident1=""/>
+      <group name="" type="customer"/>
+      <metering-point-list>
+        <metering-point name="" nr="" state="active">
+          <identification description="" ident1="" ident2="" ident3="" ident4=""/>
+          <address country="EN" house="" street="" town="" zipcode="1"/>
+          <contact address-form="" business="" first-name="" last-name="" person="" search="" title=""/>
+          <communication-list>
+            <communication nr="1" type="phone">communication</communication>
+          </communication-list>
+          <exchange date="2001-12-31T12:00:00" date-from="2001-12-31T12:00:00" date-to="2001-12-31T12:00:00" description="" name="" type="meter-mounting">
+            <data-list>
+              <data name="">data</data>
+            </data-list>
+            <group name="" type="customer">
+              <assignment ident1="" ident2="" ident3="" ident4="" ident5=""/>
+              <identification description="" ident1="" ident2="" ident3="" ident4="" uident1=""/>
+              <group name="" type="customer"/>
+              <device ext-nr="" nr="" state="active">
+                <assignment ident1="" ident2="" ident3="" ident4="" ident5=""/>
+                <identification description="" ident1="" ident2="" ident3="" ident4="" uident1=""/>
+                <address country="EN" house="" street="" town="" zipcode="1"/>
+                <general address="" password=""/>
+                <param adr2="" data-nr="" provider="" pwd2="" user="" voice-nr=""/>
+                <trans-device>
+                  <communication target-area-code="" target-phone-number="" target-prefix=""/>
+                </trans-device>
+                <datachannel-list>
+                  <datachannel obis-id-code="" obis-new="" state="active">
+                    <assignment ident1="" ident2="" ident3="" ident4="" ident5=""/>
+                    <identification description="" ident1="" ident2="" ident3="" ident4="" uident1=""/>
+                    <constant general-constant="0.0" pulse-constant="0.0" transformer-factor-i="0.0" transformer-factor-u="0.0"/>
+                    <meter-device ext-nr="" nr="">
+                      <identification description="" ident1="" ident2="" ident3="" ident4="" uident1=""/>
+                      <general address="" password=""/>
+                    </meter-device>
+                    <data-list>
+                      <data name="">data</data>
+                    </data-list>
+                  </datachannel>
+                </datachannel-list>
+                <status type="ok"/>
+              </device>
+              <customer nr="" state="active" type="">
+                <assignment ident1="" ident2="" ident3="" ident4="" ident5=""/>
+                <identification description="" ident1="" ident2="" ident3="" ident4="" uident1=""/>
+                <address country="EN" house="" street="" town="" zipcode="1"/>
+                <contact address-form="" business="" first-name="" last-name="" person="" search="" title=""/>
+                <communication-list>
+                  <communication nr="1" type="phone">communication</communication>
+                </communication-list>
+                <evaluation name="" type="load-profile-calculation">
+                  <assignment ident1="" ident2="" ident3="" ident4="" ident5=""/>
+                  <general calc-till-now="true" description="" oppress-state="" plus-n-day="1"/>
+                  <result-datachannel measuring="primary" obis-id-code="">
+                    <identification ident1="" ident2="" ident3="" ident4="" uident1=""/>
+                    <general balancing="d" daychange="" integration-period="1" timezone="" unit=""/>
+                  </result-datachannel>
+                  <source-datachannel-list>
+                    <source-datachannel formula-nr="1" type="datachannel">
+                      <assignment ident1="" ident2="" ident3="" ident4="" ident5="" search="all"/>
+                    </source-datachannel>
+                  </source-datachannel-list>
+                  <time-frame-list>
+                    <time-frame date-from="2001-12-31T12:00:00" date-to="2001-12-31T12:00:00" editor="" formula="" name="" person=""/>
+                  </time-frame-list>
+                </evaluation>
+                <status type="ok"/>
+              </customer>
+            </group>
+          </exchange>
+          <evaluation name="" type="load-profile-calculation">
+            <assignment ident1="" ident2="" ident3="" ident4="" ident5=""/>
+            <general calc-till-now="true" description="" oppress-state="" plus-n-day="1"/>
+            <result-datachannel measuring="primary" obis-id-code="">
+              <identification ident1="" ident2="" ident3="" ident4="" uident1=""/>
+              <general balancing="d" daychange="" integration-period="1" timezone="" unit=""/>
+            </result-datachannel>
+            <source-datachannel-list>
+              <source-datachannel formula-nr="1" type="datachannel">
+                <assignment ident1="" ident2="" ident3="" ident4="" ident5="" search="all"/>
+              </source-datachannel>
+            </source-datachannel-list>
+            <time-frame-list>
+              <time-frame date-from="2001-12-31T12:00:00" date-to="2001-12-31T12:00:00" editor="" formula="" name="" person=""/>
+            </time-frame-list>
+          </evaluation>
+          <status type="ok"/>
+        </metering-point>
+      </metering-point-list>
+      <device-list>
+        <device ext-nr="" nr="" state="active">
+          <assignment ident1="" ident2="" ident3="" ident4="" ident5=""/>
+          <identification description="" ident1="" ident2="" ident3="" ident4="" uident1=""/>
+          <address country="EN" house="" street="" town="" zipcode="1"/>
+          <general address="" password=""/>
+          <param adr2="" data-nr="" provider="" pwd2="" user="" voice-nr=""/>
+          <trans-device>
+            <communication target-area-code="" target-phone-number="" target-prefix=""/>
+          </trans-device>
+          <datachannel-list>
+            <datachannel obis-id-code="" obis-new="" state="active">
+              <assignment ident1="" ident2="" ident3="" ident4="" ident5=""/>
+              <identification description="" ident1="" ident2="" ident3="" ident4="" uident1=""/>
+              <constant general-constant="0.0" pulse-constant="0.0" transformer-factor-i="0.0" transformer-factor-u="0.0"/>
+              <meter-device ext-nr="" nr="">
+                <identification description="" ident1="" ident2="" ident3="" ident4="" uident1=""/>
+                <general address="" password=""/>
+              </meter-device>
+              <data-list>
+                <data name="">data</data>
+              </data-list>
+            </datachannel>
+          </datachannel-list>
+          <status type="ok"/>
+        </device>
+      </device-list>
+      <customer-list>
+        <customer nr="" state="active" type="">
+          <assignment ident1="" ident2="" ident3="" ident4="" ident5=""/>
+          <identification description="" ident1="" ident2="" ident3="" ident4="" uident1=""/>
+          <address country="EN" house="" street="" town="" zipcode="1"/>
+          <contact address-form="" business="" first-name="" last-name="" person="" search="" title=""/>
+          <communication-list>
+            <communication nr="1" type="phone">communication</communication>
+          </communication-list>
+          <evaluation name="" type="load-profile-calculation">
+            <assignment ident1="" ident2="" ident3="" ident4="" ident5=""/>
+            <general calc-till-now="true" description="" oppress-state="" plus-n-day="1"/>
+            <result-datachannel measuring="primary" obis-id-code="">
+              <identification ident1="" ident2="" ident3="" ident4="" uident1=""/>
+              <general balancing="d" daychange="" integration-period="1" timezone="" unit=""/>
+            </result-datachannel>
+            <source-datachannel-list>
+              <source-datachannel formula-nr="1" type="datachannel">
+                <assignment ident1="" ident2="" ident3="" ident4="" ident5="" search="all"/>
+              </source-datachannel>
+            </source-datachannel-list>
+            <time-frame-list>
+              <time-frame date-from="2001-12-31T12:00:00" date-to="2001-12-31T12:00:00" editor="" formula="" name="" person=""/>
+            </time-frame-list>
+          </evaluation>
+          <status type="ok"/>
+        </customer>
+      </customer-list>
+    </group>
+  </group-list>
+</import>
