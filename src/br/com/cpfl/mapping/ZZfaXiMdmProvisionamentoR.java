@@ -1,10 +1,15 @@
 package br.com.cpfl.mapping;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -103,7 +108,8 @@ public class ZZfaXiMdmProvisionamentoR implements StreamTransformation {
 
 				} // END LOOP FOR
 
-				// <assignment ident1="Template_" ident2="" ident3="" ident4="" ident5=""/>
+				// <assignment ident1="Template_" ident2="" ident3="" ident4=""
+				// ident5=""/>
 				Element assignmentNode = (Element) document.getElementsByTagName("assignment").item(0);
 
 				String[] split = null;
@@ -113,25 +119,28 @@ public class ZZfaXiMdmProvisionamentoR implements StreamTransformation {
 						String wModel = split[1];
 //					select * from Zmodel_OBISC into table t_zmodel_OBISC where model eq w_model.
 						MappingDataAccessRemote mappingService = getMappingService();
-						List dadosDaQuery = mappingService.consultarModelo(wModel);
-
+						String sql = " SELECT * FROM Z_MODEL_OBISC1 ";
+						// List dadosDaQuery =
+						// mappingService.consultarModelo(wModel);
+						List dadosDaQuery = mappingService.executarQueryGenerica(sql);
 //					List<String> dadosDaQuery = new ArrayList<String>();
 						Element channelListNode = document.createElement("datachannel-list");
 						document.getElementsByTagName("tns:header").item(0).appendChild(channelListNode);
+						if (!dadosDaQuery.isEmpty()) {
+							for (int i = 0; i < dadosDaQuery.size(); i++) {
+								TmpZmodelObisc zmodel = (TmpZmodelObisc) dadosDaQuery.get(i);
+								String wIdent1 = null;
+								String wCanal = zmodel.getId().getObiscode();
+								if (zmodel.get_flagRegister_() == null || "".equals(zmodel.get_flagRegister_())) {
+									wIdent1 = w_serialNumber;
+								} else {
+									wIdent1 = wCanal.substring(2, 5);
+								}
 
-						for (int i = 0; i < dadosDaQuery.size(); i++) {
-							TmpZmodelObisc zmodel = (TmpZmodelObisc) dadosDaQuery.get(i);
-							String wIdent1 = null;
-							String wCanal = zmodel.getId().getObiscode();
-							if (zmodel.get_flagRegister_() == null || "".equals(zmodel.get_flagRegister_())) {
-								wIdent1 = w_serialNumber;
-							} else {
-								wIdent1 = wCanal.substring(2, 5);
+								criarNo("datachannel", "",
+										(Element) document.getElementsByTagName("datachannel-list").item(0),
+										new String[] { "obis-id-code", "ident1" }, new String[] { wCanal, wIdent1 });
 							}
-
-							criarNo("datachannel", "",
-									(Element) document.getElementsByTagName("datachannel-list").item(0),
-									new String[] { "obis-id-code", "ident1" }, new String[] { wCanal, wIdent1 });
 						}
 					}
 				}
@@ -147,12 +156,12 @@ public class ZZfaXiMdmProvisionamentoR implements StreamTransformation {
 				TransformerFactory transformerFactory = TransformerFactory.newInstance();
 				Transformer transformer = transformerFactory.newTransformer();
 //				transformer.setOutputProperty(OutputKeys.METHOD, "html");
+				OutputStream out2 = outputStream;
 				DOMSource source = new DOMSource(document);
 //				StreamResult result = new StreamResult(xmlOut);
 
 				StreamResult result = new StreamResult(outputStream);
 				transformer.transform(source, result);
-
 			} else {
 
 			}
@@ -212,18 +221,13 @@ public class ZZfaXiMdmProvisionamentoR implements StreamTransformation {
 		return (Element) node;
 	}
 
-	private Node getElementByAttribute(String tagName) {
-		Node node = null;
-
-		return node;
-	}
-
 	public static void main(String[] args) throws Exception {
 
 		System.out.println("Inicio: " + new SimpleDateFormat("HH:mm:ss.SSS").format(new Date()));
 		long timeInMillis = Calendar.getInstance().getTimeInMillis();
 
-		ProvisionamentoRTeste zProv = new ProvisionamentoRTeste();
+//		ProvisionamentoRTeste zProv = new ProvisionamentoRTeste();
+		ZZfaXiMdmProvisionamentoR zProv = new ZZfaXiMdmProvisionamentoR();
 
 		InputStream inputStream = new FileInputStream(new File(
 				"D:\\desenv\\CPFL\\Workspace\\trata-falha\\dados\\provisionamento-r-UniversalAMIInterface2.xml"));
@@ -231,7 +235,7 @@ public class ZZfaXiMdmProvisionamentoR implements StreamTransformation {
 				"D:\\desenv\\CPFL\\Workspace\\trata-falha\\dados\\provisionamento-r-UniversalAMIInterface2-OUT.xml"));
 
 		zProv.execute(inputStream, outputStream);
-
+	
 		System.out.println("Fim: " + new SimpleDateFormat("HH:mm:ss.SSS").format(new Date()));
 		long timeInMillis2 = Calendar.getInstance().getTimeInMillis();
 		System.out.println("Tempo gasto = " + (Double.valueOf(timeInMillis2 - timeInMillis) / 1000) + " segundo(s)");

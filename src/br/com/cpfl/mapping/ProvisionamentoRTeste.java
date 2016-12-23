@@ -1,7 +1,15 @@
 package br.com.cpfl.mapping;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,10 +70,14 @@ public class ProvisionamentoRTeste implements StreamTransformation {
 			item.appendChild(filho);
 			
 			MappingDataAccessRemote mappingService = getMappingService();
-			String wModel = "WM231";
+			String wModel = "modelA3557";
+			String sql = " SELECT * FROM Z_MODEL_OBISC1 ";
+			// List dadosDaQuery =
+//			List dadosDaQuery = mappingService.executarQueryGenerica(sql, TmpZmodelObisc.class);
 			List dadosDaQuery = mappingService.consultarModelo(wModel );
 
 //			Element channelListNode = docSaida.createElement("datachannel-list");
+			if (!dadosDaQuery.isEmpty()) {
 			for (int i = 0; i < dadosDaQuery.size(); i++) {
 				TmpZmodelObisc zmodel = (TmpZmodelObisc) dadosDaQuery.get(i);
 				String wCanal = zmodel.getId().getObiscode();
@@ -88,18 +100,17 @@ public class ProvisionamentoRTeste implements StreamTransformation {
 
 				
 			}
+			}
 			
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			transformer.setOutputProperty(OutputKeys.METHOD, "html");
 			DOMSource source = new DOMSource(docSaida);
+			OutputStream out2 = outputStream;
 			StreamResult result = new StreamResult(outputStream);
 			transformer.transform(source, result);
-
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-			//StreamTransformationException("Falha ao processar o mapping ", e);
+			throw new StreamTransformationException("Falha ao processar o mapping ", e);
 		}
 	}
 
@@ -158,7 +169,23 @@ public class ProvisionamentoRTeste implements StreamTransformation {
 		return node;
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
+
+		System.out.println("Inicio: " + new SimpleDateFormat("HH:mm:ss.SSS").format(new Date()));
+		long timeInMillis = Calendar.getInstance().getTimeInMillis();
+
+		ProvisionamentoRTeste zProv = new ProvisionamentoRTeste();
+
+		InputStream inputStream = new FileInputStream(new File(
+				"D:\\desenv\\CPFL\\Workspace\\trata-falha\\dados\\provisionamento-r-UniversalAMIInterface2.xml"));
+		OutputStream outputStream = new FileOutputStream(new File(
+				"D:\\desenv\\CPFL\\Workspace\\trata-falha\\dados\\provisionamento-r-UniversalAMIInterface2-OUT.xml"));
+
+		zProv.execute(inputStream, outputStream);
+	
+		System.out.println("Fim: " + new SimpleDateFormat("HH:mm:ss.SSS").format(new Date()));
+		long timeInMillis2 = Calendar.getInstance().getTimeInMillis();
+		System.out.println("Tempo gasto = " + (Double.valueOf(timeInMillis2 - timeInMillis) / 1000) + " segundo(s)");
 
 	}
 
@@ -193,8 +220,6 @@ public class ProvisionamentoRTeste implements StreamTransformation {
 			context = new InitialContext(prop);
 			bean = (MappingDataAccessRemote) context.lookup("MappingDataAccessImpl/remote");
 
-			TmpZmodelObisc model = (TmpZmodelObisc) bean.consultarModelo("123").get(0);
-			System.out.println("Modelo recuperado de ejb remoto : " + model.getId().getModel());
 
 		} catch (NamingException e) {
 			e.printStackTrace();
